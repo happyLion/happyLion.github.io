@@ -84,22 +84,16 @@
 
 
 
-<meta name="description" content="1 点击一个view时
-2 点击一个viewgroup时">
+<meta name="description" content="今天查了下view滑动的时候有一条缝的原因。。坑死了，实验了各种情况，最后发现是textview如果自己实现圆角就有问题。。醉了，解决办法只能是找美工切图。。出现这种情况，一般考虑代码有问题，而不是google人家没有考虑到。。不过在找这个bug的过程中，好好的学习了下动画等一些东西，也算是因祸得福：展开查看更多">
 <meta property="og:type" content="article">
-<meta property="og:title" content="事件分发机制">
-<meta property="og:url" content="http://happylion.me/2016/08/30/事件分发机制/index.html">
+<meta property="og:title" content="window上做动画的总结">
+<meta property="og:url" content="http://happylion.me/2016/09/01/textview圆角有一条缝/index.html">
 <meta property="og:site_name" content="happylion’s blog">
-<meta property="og:description" content="1 点击一个view时
-2 点击一个viewgroup时">
-<meta property="og:image" content="http://ww3.sinaimg.cn/large/72f96cbajw1f7cxx4421zj20qr0d80to.jpg">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/72f96cbajw1f7cylti9vlj20qs0cu755.jpg">
-<meta property="og:updated_time" content="2016-08-31T07:40:57.000Z">
+<meta property="og:description" content="今天查了下view滑动的时候有一条缝的原因。。坑死了，实验了各种情况，最后发现是textview如果自己实现圆角就有问题。。醉了，解决办法只能是找美工切图。。出现这种情况，一般考虑代码有问题，而不是google人家没有考虑到。。不过在找这个bug的过程中，好好的学习了下动画等一些东西，也算是因祸得福：展开查看更多">
+<meta property="og:updated_time" content="2016-09-01T07:26:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="事件分发机制">
-<meta name="twitter:description" content="1 点击一个view时
-2 点击一个viewgroup时">
-<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/72f96cbajw1f7cxx4421zj20qr0d80to.jpg">
+<meta name="twitter:title" content="window上做动画的总结">
+<meta name="twitter:description" content="今天查了下view滑动的时候有一条缝的原因。。坑死了，实验了各种情况，最后发现是textview如果自己实现圆角就有问题。。醉了，解决办法只能是找美工切图。。出现这种情况，一般考虑代码有问题，而不是google人家没有考虑到。。不过在找这个bug的过程中，好好的学习了下动画等一些东西，也算是因祸得福：展开查看更多">
 
 
 
@@ -120,9 +114,9 @@
 
 
 
-  <link rel="canonical" href="http://happylion.me/2016/08/30/事件分发机制/"/>
+  <link rel="canonical" href="http://happylion.me/2016/09/01/textview圆角有一条缝/"/>
 
-  <title> 事件分发机制 | happylion’s blog </title>
+  <title> window上做动画的总结 | happylion’s blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -242,7 +236,7 @@
             
             
               
-                事件分发机制
+                window上做动画的总结
               
             
           </h1>
@@ -254,8 +248,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2016-08-30T17:05:48+08:00" content="8月 30 2016">
-              8月 30 2016
+            <time itemprop="dateCreated" datetime="2016-09-01T14:05:48+08:00" content="9月 1 2016">
+              9月 1 2016
             </time>
           </span>
 
@@ -282,9 +276,35 @@
       
 
       
-        <hr>
-<h4 id="1-点击一个view时"><a href="#1-点击一个view时" class="headerlink" title="1 点击一个view时"></a>1 点击一个view时</h4><p><img src="http://ww3.sinaimg.cn/large/72f96cbajw1f7cxx4421zj20qr0d80to.jpg" alt="15:03:16.jpg"></p>
-<h4 id="2-点击一个viewgroup时"><a href="#2-点击一个viewgroup时" class="headerlink" title="2 点击一个viewgroup时"></a>2 点击一个viewgroup时</h4><p><img src="http://ww2.sinaimg.cn/large/72f96cbajw1f7cylti9vlj20qs0cu755.jpg" alt="15:27:01.jpg"></p>
+        <p>今天查了下view滑动的时候有一条缝的原因。。坑死了，实验了各种情况，最后发现是textview如果自己实现圆角就有问题。。醉了，解决办法只能是找美工切图。。出现这种情况，一般考虑代码有问题，而不是google人家没有考虑到。。<br>不过在找这个bug的过程中，好好的学习了下动画等一些东西，也算是因祸得福：<br>展开查看更多<br><a id="more"></a></p>
+<ul>
+<li>一个新的window上面做动画，不能直接依附在window上的那个viewroot做动画，你给viewroot设置animator，不起作用，在viewroot的下一级view中才可以设置动画。因为这个和在activity中不同，activity的最上一级总是会有一个framelayout依附在window上。</li>
+<li>用windowmanager新开一个window的大小为和手机屏幕一样大</li>
+<li>用animator设置的动画，比如平移，超过view所在容器的大小后，就会不显示超出的view。</li>
+<li>切图的样式坑死我了。。。</li>
+<li>WindowManager.LayoutParams设置x,y时，要设置WindowManager.gravity，不然不起作用。</li>
+<li>在java中param.addrule(below,viewid),这个viewid一定要在前面的代码中出现了，不然不起作用。</li>
+<li>已经在xml中加入了view，单数需要java中动态设置该view的margin等param，那么在java中设置了param后，需要view.setlayoutparam(param), 不然不起作用，比如：</li>
+</ul>
+<pre><code>protected View createContentview() {
+      View contentview =inflater.inflate(R.layout.bubble_layout,null);
+      ImageView arrowIv= (ImageView) contentview.findViewById(R.id.iv);
+      RelativeLayout.LayoutParams arrowparam= (RelativeLayout.LayoutParams) arrowIv.getLayoutParams();
+      arrowparam.setMargins(arrowdx,0,0,0);
+      arrowIv.setLayoutParams(arrowparam);
+      return contentview;
+  }
+</code></pre><ul>
+<li><p>想要获取一个view的宽各高，通过设置globallayoutlistener的形式，比如：</p>
+<pre><code>ViewTreeObserver observer=anchor.getViewTreeObserver();
+       observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+           @Override
+           public void onGlobalLayout() {｝
+      ｝
+</code></pre><p> 这个ongloballayout的触发时机不确定，所以如果这时候我们需要拿到该view的宽高等信息来设置并呈现另一个viewb的宽高，那么我们需要：将viewb和拿到的宽高param加入到跟view时，需要进行延时处理，以便onGlobalLayout()已经执行完毕，防止param为空。</p>
+</li>
+<li>对list忘了初始化</li>
+</ul>
 
       
     </div>
@@ -310,17 +330,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/30/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2016/08/30/事件分发机制/" rel="next" title="事件分发机制">
+                <i class="fa fa-chevron-left"></i> 事件分发机制
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/01/textview圆角有一条缝/" rel="prev" title="window上做动画的总结">
-                window上做动画的总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -420,7 +436,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-点击一个view时"><span class="nav-number">1.</span> <span class="nav-text">1 点击一个view时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-点击一个viewgroup时"><span class="nav-number">2.</span> <span class="nav-text">2 点击一个viewgroup时</span></a></li></ol></div>
+              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
             
           </div>
         </section>

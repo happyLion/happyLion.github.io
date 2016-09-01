@@ -84,22 +84,33 @@
 
 
 
-<meta name="description" content="1 点击一个view时
-2 点击一个viewgroup时">
+<meta name="description" content="时下应用程序都需要花哨的动画，过渡的复杂和自定义视图，而且用户体验必须是直观，尽可能在任何设备类似。这些模式会帮你建立一个应用程序，是平稳，反应灵敏，并使用尽可能少的电池成为可能，它涵盖了微型优化，可以提高整体应用性能。  
+
+避免这些：
+避免阻塞主线程
+避免无用的信息导致一连串的无用信息（不是很理解）
+每嵌套一层使用了weight的linearlayout，就会重复测量一回，所以尽量避免使用过多">
 <meta property="og:type" content="article">
-<meta property="og:title" content="事件分发机制">
-<meta property="og:url" content="http://happylion.me/2016/08/30/事件分发机制/index.html">
+<meta property="og:title" content="android性能优化（翻译）">
+<meta property="og:url" content="http://happylion.me/2016/09/01/f/index.html">
 <meta property="og:site_name" content="happylion’s blog">
-<meta property="og:description" content="1 点击一个view时
-2 点击一个viewgroup时">
-<meta property="og:image" content="http://ww3.sinaimg.cn/large/72f96cbajw1f7cxx4421zj20qr0d80to.jpg">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/72f96cbajw1f7cylti9vlj20qs0cu755.jpg">
-<meta property="og:updated_time" content="2016-08-31T07:40:57.000Z">
+<meta property="og:description" content="时下应用程序都需要花哨的动画，过渡的复杂和自定义视图，而且用户体验必须是直观，尽可能在任何设备类似。这些模式会帮你建立一个应用程序，是平稳，反应灵敏，并使用尽可能少的电池成为可能，它涵盖了微型优化，可以提高整体应用性能。  
+
+避免这些：
+避免阻塞主线程
+避免无用的信息导致一连串的无用信息（不是很理解）
+每嵌套一层使用了weight的linearlayout，就会重复测量一回，所以尽量避免使用过多">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/7853084cjw1f6vvosx5moj20s80fnact.jpg">
+<meta property="og:updated_time" content="2016-09-01T09:16:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="事件分发机制">
-<meta name="twitter:description" content="1 点击一个view时
-2 点击一个viewgroup时">
-<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/72f96cbajw1f7cxx4421zj20qr0d80to.jpg">
+<meta name="twitter:title" content="android性能优化（翻译）">
+<meta name="twitter:description" content="时下应用程序都需要花哨的动画，过渡的复杂和自定义视图，而且用户体验必须是直观，尽可能在任何设备类似。这些模式会帮你建立一个应用程序，是平稳，反应灵敏，并使用尽可能少的电池成为可能，它涵盖了微型优化，可以提高整体应用性能。  
+
+避免这些：
+避免阻塞主线程
+避免无用的信息导致一连串的无用信息（不是很理解）
+每嵌套一层使用了weight的linearlayout，就会重复测量一回，所以尽量避免使用过多">
+<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/7853084cjw1f6vvosx5moj20s80fnact.jpg">
 
 
 
@@ -120,9 +131,9 @@
 
 
 
-  <link rel="canonical" href="http://happylion.me/2016/08/30/事件分发机制/"/>
+  <link rel="canonical" href="http://happylion.me/2016/09/01/f/"/>
 
-  <title> 事件分发机制 | happylion’s blog </title>
+  <title> android性能优化（翻译） | happylion’s blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -242,7 +253,7 @@
             
             
               
-                事件分发机制
+                android性能优化（翻译）
               
             
           </h1>
@@ -254,8 +265,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-30T17:05:48+08:00" content="8月 30 2016">
-              8月 30 2016
+            <time itemprop="dateCreated" datetime="2016-09-01T17:15:38+08:00" content="9月 1 2016">
+              9月 1 2016
             </time>
           </span>
 
@@ -282,10 +293,42 @@
       
 
       
-        <hr>
-<h4 id="1-点击一个view时"><a href="#1-点击一个view时" class="headerlink" title="1 点击一个view时"></a>1 点击一个view时</h4><p><img src="http://ww3.sinaimg.cn/large/72f96cbajw1f7cxx4421zj20qr0d80to.jpg" alt="15:03:16.jpg"></p>
-<h4 id="2-点击一个viewgroup时"><a href="#2-点击一个viewgroup时" class="headerlink" title="2 点击一个viewgroup时"></a>2 点击一个viewgroup时</h4><p><img src="http://ww2.sinaimg.cn/large/72f96cbajw1f7cylti9vlj20qs0cu755.jpg" alt="15:27:01.jpg"></p>
-
+        <p>时下应用程序都需要花哨的动画，过渡的复杂和自定义视图，而且用户体验必须是直观，尽可能在任何设备类似。这些模式会帮你建立一个应用程序，是平稳，反应灵敏，并使用尽可能少的电池成为可能，它涵盖了微型优化，可以提高整体应用性能。  </p>
+<hr>
+<h4 id="避免这些："><a href="#避免这些：" class="headerlink" title="避免这些："></a>避免这些：</h4><ul>
+<li>避免阻塞主线程</li>
+<li>避免无用的信息导致一连串的无用信息（不是很理解）</li>
+<li>每嵌套一层使用了weight的linearlayout，就会重复测量一回，所以尽量避免使用过多。替代方法：可以使用官方的percentrelativelayout   </li>
+</ul>
+<p><img src="http://ww3.sinaimg.cn/large/7853084cjw1f6vvosx5moj20s80fnact.jpg" alt="20:51:25.jpg"></p>
+<ul>
+<li>避免自定义view被不恰当的制造</li>
+<li>避免创建无效对象</li>
+<li>静态常量是用static final修饰。（能提高15％－20%）。除此之外，还有一条：如果你不需要访问对象的域, 那么应该使方法变为静态. 调用它将会提升15%~20%的速度. 除此之外这还是一个好的编程习惯, 因为它从方法的名称上就可以告知大家调用这个方法不会引起对象状态的变化.</li>
+<li>使用基本类型（Float 比 Integer 慢两倍）</li>
+<li>避免在内部类中使用Getters/Setters（字段访问速度会快3倍）</li>
+<li>使用增强的for方法 即for（item a ：list），相比for（；；）</li>
+<li>尽量少创建私有内部类，而是放在一个package中。虽然私有内部类可以调用外部类的私有成员变量和私有方法。因为这是编译器进行了一次trick，实际还是在一个包中创建了俩个类， 在外部类中偷偷摸摸的创建了访问私有变量的静态方法，从而使内部类获得了访问权限。这对繁琐的方式对性能产生影响，不如将其创建成包可见。</li>
+<li>小心使用native</li>
+</ul>
+<h4 id="自定义view"><a href="#自定义view" class="headerlink" title="自定义view"></a>自定义view</h4><ul>
+<li>尽可能的保持简单（KISS原则）</li>
+<li>在根layout中使用merge（这个只能是根节点为framelayout的情况）</li>
+<li>使用include标签 （这个和上面那个可以看<a href="http://blog.csdn.net/chenlaic/article/details/6090069" target="_blank" rel="external">点这里</a>）</li>
+<li>避免无用的layout</li>
+<li>不要在OnDraw中进行复杂操作及计算</li>
+<li>移除不必要的invalidate()</li>
+<li>考虑创建属于你自己的ViewGroup</li>
+<li>用RecyclerView （代替ListView和GridView）</li>
+</ul>
+<h4 id="内存波动"><a href="#内存波动" class="headerlink" title="内存波动"></a>内存波动</h4><p>不要一下子分配大量不必要的对象：</p>
+<ul>
+<li>不可变的类 ：string</li>
+<li>自动分装的类：Integer, Boolean</li>
+<li>考虑使用对象池和cache来应对这些大量的内存波动</li>
+<li>留意一下枚举型，一个枚举常量的引用要占四个字节。</li>
+</ul>
+<h4 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h4>
       
     </div>
 
@@ -310,16 +353,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/30/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2016/09/01/af/" rel="next" title="工具module写法规范讨论">
+                <i class="fa fa-chevron-left"></i> 工具module写法规范讨论
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/01/afff/" rel="prev" title="window上做动画的总结">
-                window上做动画的总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/01/11/" rel="prev" title="handler概要">
+                handler概要 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -420,7 +463,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-点击一个view时"><span class="nav-number">1.</span> <span class="nav-text">1 点击一个view时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-点击一个viewgroup时"><span class="nav-number">2.</span> <span class="nav-text">2 点击一个viewgroup时</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#避免这些："><span class="nav-number">1.</span> <span class="nav-text">避免这些：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义view"><span class="nav-number">2.</span> <span class="nav-text">自定义view</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存波动"><span class="nav-number">3.</span> <span class="nav-text">内存波动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存泄漏"><span class="nav-number">4.</span> <span class="nav-text">内存泄漏</span></a></li></ol></div>
             
           </div>
         </section>

@@ -235,6 +235,235 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/01/11/" itemprop="url">
+                  handler概要
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-01T17:17:04+08:00" content="9月 1 2016">
+              9月 1 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li>andriod开发了一种looper线程。</li>
+<li>looper线程一开始perpare（）时候会初始化一个消息队列。（UI线程是一个looper线程），然后looper线程就一直循环下去。</li>
+<li>我们在哪一个线程中初始化一个handler，这个handler里面的成员变量就拿到该线程的消息队列。</li>
+<li>当我们使用这个handler发送消息时(在a线程可以拿到b线程的handler进行发消息，比如，在在异步线程可以拿到主线程handler)，会先把该handler放入message的target中，然后把message放入handler初始化的所在现场的消息队列中（前面说了handler持有它所在现场的消息队列）。</li>
+<li>looper循环的时候会一直检测消息队列有没有消息，如果有（或者按message规定的时间），就把消息拿出来，调用message的target（也就是handler）的dispatchmessage（）方法进行处理消息。</li>
+<li>dispatchmessage（）方法会匹配三种处理方法，如果发送消息使用的是handler.post（runnable)，那么进行runnable的方法；如果没有，进行初始化handler时传入的mCallback方法，然后进行初始化handler时重写的handlemessage（）方法。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/01/f/" itemprop="url">
+                  android性能优化（翻译）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-01T17:15:38+08:00" content="9月 1 2016">
+              9月 1 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>时下应用程序都需要花哨的动画，过渡的复杂和自定义视图，而且用户体验必须是直观，尽可能在任何设备类似。这些模式会帮你建立一个应用程序，是平稳，反应灵敏，并使用尽可能少的电池成为可能，它涵盖了微型优化，可以提高整体应用性能。  </p>
+<hr>
+<h4 id="避免这些："><a href="#避免这些：" class="headerlink" title="避免这些："></a>避免这些：</h4><ul>
+<li>避免阻塞主线程</li>
+<li>避免无用的信息导致一连串的无用信息（不是很理解）</li>
+<li>每嵌套一层使用了weight的linearlayout，就会重复测量一回，所以尽量避免使用过多。替代方法：可以使用官方的percentrelativelayout   </li>
+</ul>
+<p><img src="http://ww3.sinaimg.cn/large/7853084cjw1f6vvosx5moj20s80fnact.jpg" alt="20:51:25.jpg"></p>
+<ul>
+<li>避免自定义view被不恰当的制造</li>
+<li>避免创建无效对象</li>
+<li>静态常量是用static final修饰。（能提高15％－20%）。除此之外，还有一条：如果你不需要访问对象的域, 那么应该使方法变为静态. 调用它将会提升15%~20%的速度. 除此之外这还是一个好的编程习惯, 因为它从方法的名称上就可以告知大家调用这个方法不会引起对象状态的变化.</li>
+<li>使用基本类型（Float 比 Integer 慢两倍）</li>
+<li>避免在内部类中使用Getters/Setters（字段访问速度会快3倍）</li>
+<li>使用增强的for方法 即for（item a ：list），相比for（；；）</li>
+<li>尽量少创建私有内部类，而是放在一个package中。虽然私有内部类可以调用外部类的私有成员变量和私有方法。因为这是编译器进行了一次trick，实际还是在一个包中创建了俩个类， 在外部类中偷偷摸摸的创建了访问私有变量的静态方法，从而使内部类获得了访问权限。这对繁琐的方式对性能产生影响，不如将其创建成包可见。</li>
+<li>小心使用native</li>
+</ul>
+<h4 id="自定义view"><a href="#自定义view" class="headerlink" title="自定义view"></a>自定义view</h4><ul>
+<li>尽可能的保持简单（KISS原则）</li>
+<li>在根layout中使用merge（这个只能是根节点为framelayout的情况）</li>
+<li>使用include标签 （这个和上面那个可以看<a href="http://blog.csdn.net/chenlaic/article/details/6090069" target="_blank" rel="external">点这里</a>）</li>
+<li>避免无用的layout</li>
+<li>不要在OnDraw中进行复杂操作及计算</li>
+<li>移除不必要的invalidate()</li>
+<li>考虑创建属于你自己的ViewGroup</li>
+<li>用RecyclerView （代替ListView和GridView）</li>
+</ul>
+<h4 id="内存波动"><a href="#内存波动" class="headerlink" title="内存波动"></a>内存波动</h4><p>不要一下子分配大量不必要的对象：</p>
+<ul>
+<li>不可变的类 ：string</li>
+<li>自动分装的类：Integer, Boolean</li>
+<li>考虑使用对象池和cache来应对这些大量的内存波动</li>
+<li>留意一下枚举型，一个枚举常量的引用要占四个字节。</li>
+</ul>
+<h4 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h4>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/01/af/" itemprop="url">
                   工具module写法规范讨论
                 </a>
@@ -649,7 +878,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

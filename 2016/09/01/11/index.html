@@ -84,22 +84,25 @@
 
 
 
-<meta name="description" content="1 点击一个view时
-2 点击一个viewgroup时">
+<meta name="description" content="andriod开发了一种looper线程。
+looper线程一开始perpare（）时候会初始化一个消息队列。（UI线程是一个looper线程），然后looper线程就一直循环下去。
+我们在哪一个线程中初始化一个handler，这个handler里面的成员变量就拿到该线程的消息队列。
+当我们使用这个handler发送消息时(在a线程可以拿到b线程的handler进行发消息，比如，在在异步线程可以">
 <meta property="og:type" content="article">
-<meta property="og:title" content="事件分发机制">
-<meta property="og:url" content="http://happylion.me/2016/08/30/事件分发机制/index.html">
+<meta property="og:title" content="handler概要">
+<meta property="og:url" content="http://happylion.me/2016/09/01/11/index.html">
 <meta property="og:site_name" content="happylion’s blog">
-<meta property="og:description" content="1 点击一个view时
-2 点击一个viewgroup时">
-<meta property="og:image" content="http://ww3.sinaimg.cn/large/72f96cbajw1f7cxx4421zj20qr0d80to.jpg">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/72f96cbajw1f7cylti9vlj20qs0cu755.jpg">
-<meta property="og:updated_time" content="2016-08-31T07:40:57.000Z">
+<meta property="og:description" content="andriod开发了一种looper线程。
+looper线程一开始perpare（）时候会初始化一个消息队列。（UI线程是一个looper线程），然后looper线程就一直循环下去。
+我们在哪一个线程中初始化一个handler，这个handler里面的成员变量就拿到该线程的消息队列。
+当我们使用这个handler发送消息时(在a线程可以拿到b线程的handler进行发消息，比如，在在异步线程可以">
+<meta property="og:updated_time" content="2016-09-01T09:20:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="事件分发机制">
-<meta name="twitter:description" content="1 点击一个view时
-2 点击一个viewgroup时">
-<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/72f96cbajw1f7cxx4421zj20qr0d80to.jpg">
+<meta name="twitter:title" content="handler概要">
+<meta name="twitter:description" content="andriod开发了一种looper线程。
+looper线程一开始perpare（）时候会初始化一个消息队列。（UI线程是一个looper线程），然后looper线程就一直循环下去。
+我们在哪一个线程中初始化一个handler，这个handler里面的成员变量就拿到该线程的消息队列。
+当我们使用这个handler发送消息时(在a线程可以拿到b线程的handler进行发消息，比如，在在异步线程可以">
 
 
 
@@ -120,9 +123,9 @@
 
 
 
-  <link rel="canonical" href="http://happylion.me/2016/08/30/事件分发机制/"/>
+  <link rel="canonical" href="http://happylion.me/2016/09/01/11/"/>
 
-  <title> 事件分发机制 | happylion’s blog </title>
+  <title> handler概要 | happylion’s blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -242,7 +245,7 @@
             
             
               
-                事件分发机制
+                handler概要
               
             
           </h1>
@@ -254,8 +257,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-30T17:05:48+08:00" content="8月 30 2016">
-              8月 30 2016
+            <time itemprop="dateCreated" datetime="2016-09-01T17:17:04+08:00" content="9月 1 2016">
+              9月 1 2016
             </time>
           </span>
 
@@ -282,9 +285,14 @@
       
 
       
-        <hr>
-<h4 id="1-点击一个view时"><a href="#1-点击一个view时" class="headerlink" title="1 点击一个view时"></a>1 点击一个view时</h4><p><img src="http://ww3.sinaimg.cn/large/72f96cbajw1f7cxx4421zj20qr0d80to.jpg" alt="15:03:16.jpg"></p>
-<h4 id="2-点击一个viewgroup时"><a href="#2-点击一个viewgroup时" class="headerlink" title="2 点击一个viewgroup时"></a>2 点击一个viewgroup时</h4><p><img src="http://ww2.sinaimg.cn/large/72f96cbajw1f7cylti9vlj20qs0cu755.jpg" alt="15:27:01.jpg"></p>
+        <ul>
+<li>andriod开发了一种looper线程。</li>
+<li>looper线程一开始perpare（）时候会初始化一个消息队列。（UI线程是一个looper线程），然后looper线程就一直循环下去。</li>
+<li>我们在哪一个线程中初始化一个handler，这个handler里面的成员变量就拿到该线程的消息队列。</li>
+<li>当我们使用这个handler发送消息时(在a线程可以拿到b线程的handler进行发消息，比如，在在异步线程可以拿到主线程handler)，会先把该handler放入message的target中，然后把message放入handler初始化的所在现场的消息队列中（前面说了handler持有它所在现场的消息队列）。</li>
+<li>looper循环的时候会一直检测消息队列有没有消息，如果有（或者按message规定的时间），就把消息拿出来，调用message的target（也就是handler）的dispatchmessage（）方法进行处理消息。</li>
+<li>dispatchmessage（）方法会匹配三种处理方法，如果发送消息使用的是handler.post（runnable)，那么进行runnable的方法；如果没有，进行初始化handler时传入的mCallback方法，然后进行初始化handler时重写的handlemessage（）方法。</li>
+</ul>
 
       
     </div>
@@ -310,17 +318,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/30/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2016/09/01/f/" rel="next" title="android性能优化（翻译）">
+                <i class="fa fa-chevron-left"></i> android性能优化（翻译）
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/01/afff/" rel="prev" title="window上做动画的总结">
-                window上做动画的总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -420,7 +424,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-点击一个view时"><span class="nav-number">1.</span> <span class="nav-text">1 点击一个view时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-点击一个viewgroup时"><span class="nav-number">2.</span> <span class="nav-text">2 点击一个viewgroup时</span></a></li></ol></div>
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
             
           </div>
         </section>

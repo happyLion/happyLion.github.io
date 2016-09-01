@@ -172,7 +172,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -235,6 +235,106 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/01/af/" itemprop="url">
+                  工具module写法规范讨论
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-01T17:11:34+08:00" content="9月 1 2016">
+              9月 1 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li>在工具类中最好不要引入耦合应用里面某个具体类中的信息，以参数的形式传入，但这样的一个弊端就是参数长，使用该工具时，需要知道传入很多的信息量。。</li>
+<li>工具方法中参数最好写接口，不然你直接写死了，没人能用了。。。</li>
+<li>不要高估方法被使用的次数，有些真的只有你这个界面会使用，就不要写成工具类了，可以通过观看方法中耦合了多少你这个界面这个业务的信息就可以看出来。 如果想写成工具类，具体信息就传参数和接口，参数太多，说明你这个不适合当工具类。</li>
+<li>业务工具也是工具，也可能会被复用。所以可以写两个工具类，一个用于业务需求，一个用于拆包和被其他应用复用。</li>
+<li>不要为了想用某一个类中的方法就，一言不合把那个类引进来了，特别这个类还是第三方库中的某一个类。这样你把util独立出来岂不是还要关联一些第三方库。。冷静下来思考一下，是不是只用了这一个地方，是不是就用了那个包／类的那一个方法，如果是，把那个方法复制过来就行了。当然这是建立在那个方法中没有依赖非官方的库。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/01/afff/" itemprop="url">
                   window上做动画的总结
                 </a>
@@ -248,7 +348,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2016-09-01T14:05:48+08:00" content="9月 1 2016">
               9月 1 2016
             </time>
@@ -281,7 +381,7 @@
           <p>今天查了下view滑动的时候有一条缝的原因。。坑死了，实验了各种情况，最后发现是textview如果自己实现圆角就有问题。。醉了，解决办法只能是找美工切图。。出现这种情况，一般考虑代码有问题，而不是google人家没有考虑到。。<br>不过在找这个bug的过程中，好好的学习了下动画等一些东西，也算是因祸得福：<br>展开查看更多<br>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/09/01/afff/#more" rel="contents">
-              Weiterlesen &raquo;
+              Read more &raquo;
             </a>
           </div>
         
@@ -344,7 +444,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2016-08-30T17:05:48+08:00" content="8月 30 2016">
               8月 30 2016
             </time>
@@ -440,7 +540,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2016-08-30T15:41:11+08:00" content="8月 30 2016">
               8月 30 2016
             </time>
@@ -549,8 +649,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -597,7 +697,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

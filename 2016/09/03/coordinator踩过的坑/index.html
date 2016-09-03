@@ -84,19 +84,31 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+<meta name="description" content="activity下有一个:
+@Override
+   public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+       super.onCreate(savedInstanceState, persistentState);
+   }
+ 在这个方法中写setcontentview">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://happylion.me/2016/08/30/hello-world/index.html">
+<meta property="og:title" content="coordinator踩过的坑">
+<meta property="og:url" content="http://happylion.me/2016/09/03/coordinator踩过的坑/index.html">
 <meta property="og:site_name" content="happylion’s blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
-<meta property="og:updated_time" content="2016-08-30T07:41:11.000Z">
+<meta property="og:description" content="activity下有一个:
+@Override
+   public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+       super.onCreate(savedInstanceState, persistentState);
+   }
+ 在这个方法中写setcontentview">
+<meta property="og:updated_time" content="2016-09-03T06:52:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+<meta name="twitter:title" content="coordinator踩过的坑">
+<meta name="twitter:description" content="activity下有一个:
+@Override
+   public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+       super.onCreate(savedInstanceState, persistentState);
+   }
+ 在这个方法中写setcontentview">
 
 
 
@@ -117,9 +129,9 @@ Quick">
 
 
 
-  <link rel="canonical" href="http://happylion.me/2016/08/30/hello-world/"/>
+  <link rel="canonical" href="http://happylion.me/2016/09/03/coordinator踩过的坑/"/>
 
-  <title> Hello World | happylion’s blog </title>
+  <title> coordinator踩过的坑 | happylion’s blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -239,7 +251,7 @@ Quick">
             
             
               
-                Hello World
+                coordinator踩过的坑
               
             
           </h1>
@@ -251,8 +263,8 @@ Quick">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-30T15:41:11+08:00" content="8月 30 2016">
-              8月 30 2016
+            <time itemprop="dateCreated" datetime="2016-09-03T14:52:11+08:00" content="9月 3 2016">
+              9月 3 2016
             </time>
           </span>
 
@@ -279,15 +291,68 @@ Quick">
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <ul>
+<li><p>activity下有一个:</p>
+<pre><code>@Override
+   public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+       super.onCreate(savedInstanceState, persistentState);
+   }
+</code></pre><p> 在这个方法中写setcontentview（）不起作用。。。蛋疼</p>
+</li>
+<li><p>coordinatorlayout类似于framelayout，里面的普通直接组件（如textview等）都是从左上角布局，会引起相互覆盖。但是像AppBarLayout，FloatingActionButton，这种在coordinatorlayout中并不会被覆盖，因为他们是在另外一个window上。所以coordinatorlayout中的直接子类都是一个个的window。</p>
+</li>
+<li><p>只有coordinator的直接子类设置的app:layout_behavior 才会起作用。并且，app:layout_behavior使用</p>
+<pre><code>ScrollToTopBehavior extends CoordinatorLayout.Behavior&lt;View&gt; 
+</code></pre><p>这种方式时，需要重写：layoutDependsOn（）和onDependentViewChanged（）方法，layoutDependsOn中，比如：</p>
+<pre><code>@Override
+   public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
+       return dependency.getId()== R.id.scrollview_textview2;
+   }
+</code></pre></li>
+</ul>
+<p>  即通过id来说明依赖的view是哪个view。注意这里的id必须是coordinatorlayout的直接子类，<br>也就是说依赖必须是那几个window view，不能是一个scrollview的子类组件。（所以不能监听一个scrollview的子类组件来改变behavior的那个view）当依赖view变化时，就会调用onDependentViewChanged来改变，你设置了behavior的那个view。还有一种监听方式是通过<br>app:layout_behavior使用</p>
+<pre><code>ScrollAwareFABBehavior extends FloatingActionButton.Behavior
+</code></pre><p>   这时候需要coodanator中的内容布局含有NestedScrollView或者recycleview。然后实现onStartNestedScroll（）和onNestedScroll（）方法，作用和上面那两个方法差不多。  </p>
+<ul>
+<li>NestedScrollView中的直接元素如果不是listview，recycleview这种，你得写一层layout，比如textview得在layout中才能放入NestedScrollView。不然不显示。</li>
+<li>在coordinatorlayout上的直接子类都是一个个window，后面的会把前面的覆盖了，比如toolbar不是放在appbarlayout的里面，而是放在外面且在appbarlayout的后面，那么toolbar就会把appbarlayout里面的东西遮挡。</li>
+<li>每个coordinatorlayout上的直接子类也就是一个window view，都可以设置layout_anchor＝@id／view a‘s id，那么这个window view就会在view a 的上面，并且随着viewa的移动而移动。（window view写在view a后面，防止被覆盖）</li>
+<li>如果scrollview 不添加：app:layout_behavior=”@string/appbar_scrolling_view_behavior”，那么scrollview就会充满整个屏幕（如果actionbar在appbarlayout里面的话，可能这个appbarlayout优先级就会高些，会遮住scrollview一部分），如果加上这句话就会在appbarlayout下面（注意是在appbarlayout下面，不是toolbar，不管appbarlayout里面有没用toolbar，并且appbar_scrolling_view_behavior是检测appbarlayout里面设置的app:layout_scrollFlags）。</li>
+<li><p>在appbarlayout中的子CollapsingToolbarLayout中设置了            app:layout_scrollFlags=”scroll|exitUntilCollapsed”，并且scrollview 添加了：app:layout_behavior=”@string/appbar_scrolling_view_behavior”，那么向上滑动的时候就会收缩CollapsingToolbarLayout里面的view，当然CollapsingToolbarLayout中的view可以设置app:layout_collapseMode=”pin”，固定该view在上面。如果CollapsingToolbarLayout中的view设置app:layout_collapseMode=”parallax”，在内容滚动时，CollapsingToolbarLayout中的View（比如ImageView)也可以同时滚动，实现视差滚动效果，通常和layout_collapseParallaxMultiplier(设置视差因子)搭配使用。<br>layout_collapseParallaxMultiplier(视差因子) - 设置视差滚动因子，值为：0~1。 比如：</p>
+<pre><code>&lt;android.support.design.widget.AppBarLayout  
+        android:layout_width=&quot;match_parent&quot;  
+        android:layout_height=&quot;256dp&quot;  
+        android:fitsSystemWindows=&quot;true&quot;&gt;  
+        &lt;android.support.design.widget.CollapsingToolbarLayout  
+            android:id=&quot;@+id/collapsing_toolbar_layout&quot;  
+            android:layout_width=&quot;match_parent&quot;  
+            android:layout_height=&quot;match_parent&quot;  
+            app:contentScrim=&quot;#30469b&quot;  
+            app:expandedTitleMarginStart=&quot;48dp&quot;  
+            app:layout_scrollFlags=&quot;scroll|exitUntilCollapsed&quot;&gt;  
+
+            &lt;ImageView  
+                android:layout_width=&quot;match_parent&quot;  
+                android:layout_height=&quot;match_parent&quot;  
+                android:scaleType=&quot;centerCrop&quot;  
+                android:src=&quot;@mipmap/bg&quot;  
+                app:layout_collapseMode=&quot;parallax&quot;  
+                app:layout_collapseParallaxMultiplier=&quot;0.7&quot;  /&gt;  
+
+            &lt;android.support.v7.widget.Toolbar  
+                android:id=&quot;@+id/toolbar&quot;  
+                android:layout_width=&quot;match_parent&quot;  
+                android:layout_height=&quot;?attr/actionBarSize&quot;  
+                app:layout_collapseMode=&quot;pin&quot; /&gt;  
+        &lt;/android.support.design.widget.CollapsingToolbarLayout&gt;  
+    &lt;/android.support.design.widget.AppBarLayout&gt;  
+</code></pre></li>
+</ul>
+<p>   上面的contentScrim 为 设置当完全CollapsingToolbarLayout折叠(收缩)后的背景颜色。<br>expandedTitleMarginStart 为 设置扩张时候(还没有收缩时)title向左填充的距离。<a href="http://http://blog.csdn.net/u010687392/article/details/46906657" target="_blank" rel="external">参考这篇文章</a></p>
+<ul>
+<li>之前想过怎么把一个view显示在另一个view的上面，使用framelayout就可以了，能够覆盖。CollapsingToolbarLayout 这个性质和framelayout相似，子view相互覆盖，AppBarLayout和linearlayout差不多。</li>
+<li>可以将任何的view放在coordinator中作为直接子view，然后辅助 layout anchor，那么该子view就会浮于该view的上面，非常方便。设置动画什么的也非常方便。</li>
+</ul>
 
       
     </div>
@@ -313,13 +378,13 @@ Quick">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/09/01/11/" rel="next" title="handler概要">
+                <i class="fa fa-chevron-left"></i> handler概要
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/30/事件分发机制/" rel="prev" title="事件分发机制">
-                事件分发机制 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -419,7 +484,7 @@ Quick">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
             
           </div>
         </section>

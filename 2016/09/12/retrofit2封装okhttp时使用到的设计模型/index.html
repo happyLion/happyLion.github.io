@@ -1,0 +1,746 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="retrofit2和okhttp的具体使用网上有很多，这里不具体阐述，只对retrofit2封装okhttp时使用到的几个设计模型学习一下。  
+
+okhttp基础知识看下http最基本的使用方式：先创建一个request，并利用该request，使用okhttpclient生成一个call。call的enqueue会降该网络请求加入队列，进行数据的异步请求。我们只需要传入一个实现了的callba">
+<meta property="og:type" content="article">
+<meta property="og:title" content="retrofit2封装okhttp时使用到的设计模型">
+<meta property="og:url" content="http://happylion.me/2016/09/12/retrofit2封装okhttp时使用到的设计模型/index.html">
+<meta property="og:site_name" content="happylion’s blog">
+<meta property="og:description" content="retrofit2和okhttp的具体使用网上有很多，这里不具体阐述，只对retrofit2封装okhttp时使用到的几个设计模型学习一下。  
+
+okhttp基础知识看下http最基本的使用方式：先创建一个request，并利用该request，使用okhttpclient生成一个call。call的enqueue会降该网络请求加入队列，进行数据的异步请求。我们只需要传入一个实现了的callba">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNbRwjw1f5tgswca4fj30k40d2gmx.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tNbRwjw1f5thd6eht7j30ah0323yj.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNbRwjw1f5thbhncqbj30ma0bfabg.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006tNbRwjw1f5ulmbyy3oj30mb0813zm.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNbRwjw1f5uls5pdznj30df00n748.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006tNbRwjw1f5um5yby42j30lp0gf0vd.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNbRwjw1f5umixrzcsj30en00nq2v.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNbRwjw1f5un9zpklvj30jd0fjmy3.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tNbRwjw1f5unb1jga4j30md0473z5.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tNbRwjw1f5unchhe14j30di02iglq.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006tNbRwjw1f5ti9g44bqj307t0173yg.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tNbRwjw1f5tip1vfzkj30ml0gbgo3.jpg">
+<meta property="og:updated_time" content="2016-09-12T11:02:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="retrofit2封装okhttp时使用到的设计模型">
+<meta name="twitter:description" content="retrofit2和okhttp的具体使用网上有很多，这里不具体阐述，只对retrofit2封装okhttp时使用到的几个设计模型学习一下。  
+
+okhttp基础知识看下http最基本的使用方式：先创建一个request，并利用该request，使用okhttpclient生成一个call。call的enqueue会降该网络请求加入队列，进行数据的异步请求。我们只需要传入一个实现了的callba">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/006tNbRwjw1f5tgswca4fj30k40d2gmx.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://happylion.me/2016/09/12/retrofit2封装okhttp时使用到的设计模型/"/>
+
+  <title> retrofit2封装okhttp时使用到的设计模型 | happylion’s blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">happylion’s blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">爱代码，爱生活</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                retrofit2封装okhttp时使用到的设计模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-12T19:02:36+08:00" content="9月 12 2016">
+              9月 12 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>retrofit2和okhttp的具体使用网上有很多，这里不具体阐述，只对retrofit2封装okhttp时使用到的几个设计模型学习一下。  </p>
+<hr>
+<h3 id="okhttp基础知识"><a href="#okhttp基础知识" class="headerlink" title="okhttp基础知识"></a>okhttp基础知识</h3><p>看下http最基本的使用方式：<br><img src="http://ww4.sinaimg.cn/large/006tNbRwjw1f5tgswca4fj30k40d2gmx.jpg" alt="15:24:51.jpg"><br>先创建一个request，并利用该request，使用okhttpclient生成一个call。<br>call的enqueue会降该网络请求加入队列，进行数据的异步请求。我们只需要传入一个实现了的callback回调，即可对异步请求的结果进行处理。<strong>问题1: 注意onResponse()方法也是在异步线程进行的，所以需要一个huandler调用post（runnable）方法返回到ui线程进行ui处理。</strong>  </p>
+<h3 id="retrofit2对该问题的封装"><a href="#retrofit2对该问题的封装" class="headerlink" title="retrofit2对该问题的封装"></a>retrofit2对该问题的封装</h3><p>要了解retrofit2对该问题的封装，我们需要了解retrofit的大致工作情况：</p>
+<h4 id="retrofit2基础知识"><a href="#retrofit2基础知识" class="headerlink" title="retrofit2基础知识"></a>retrofit2基础知识</h4><p>我们需要先定义一个接口对象，演示一个最简单的get请求，接口如下所示：：</p>
+<p><img src="http://ww3.sinaimg.cn/large/006tNbRwjw1f5thd6eht7j30ah0323yj.jpg" alt="15:44:27.jpg"></p>
+<p>可以看到有一个getUsers(）方法，通过@GET注解标识为get请求，@GET中所填写的这个“users”值和baseUrl组成完整的路径，baseUrl在构造retrofit对象时给出。<br>然后我们需要入如下步骤：<br><img src="http://ww1.sinaimg.cn/large/006tNbRwjw1f5thbhncqbj30ma0bfabg.jpg" alt="15:42:50.jpg"></p>
+<h4 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h4><p>通过</p>
+<pre><code>IUserBiz userBiz = retrofit.create(IUserBiz.class);
+</code></pre><p>来创建该接口的一个代理，如下面代码所示：<br><img src="http://ww2.sinaimg.cn/large/006tNbRwjw1f5ulmbyy3oj30mb0813zm.jpg" alt="14:57:13.jpg"><br>然后当调用该接口代理的方法时，会调用invoke的那三条语句。下面逐句分析这三条语句。<br>先看下<img src="http://ww4.sinaimg.cn/large/006tNbRwjw1f5uls5pdznj30df00n748.jpg" alt="15:02:49.jpg"><br>这个语句为生成servicemethod实例，具体为servicemethod的build（）方法所做的事情：</p>
+<pre><code>//Retrofit class
+ServiceMethod loadServiceMethod(Method method) {
+    ServiceMethod result;
+    synchronized (serviceMethodCache) {
+      result = serviceMethodCache.get(method);
+      if (result == null) {
+        result = new ServiceMethod.Builder(this, method).build();
+        serviceMethodCache.put(method, result);
+      }
+    }
+    return result;
+  }
+
+//ServiceMethod
+public ServiceMethod build() {
+      callAdapter = createCallAdapter();
+      responseType = callAdapter.responseType();
+      if (responseType == Response.class || responseType == okhttp3.Response.class) {
+        throw methodError(&quot;&apos;&quot;
+            + Utils.getRawType(responseType).getName()
+            + &quot;&apos; is not a valid response body type. Did you mean ResponseBody?&quot;);
+      }
+      responseConverter = createResponseConverter();
+
+      for (Annotation annotation : methodAnnotations) {
+        parseMethodAnnotation(annotation);
+      }
+
+
+      int parameterCount = parameterAnnotationsArray.length;
+      parameterHandlers = new ParameterHandler&lt;?&gt;[parameterCount];
+      for (int p = 0; p &lt; parameterCount; p++) {
+        Type parameterType = parameterTypes[p];
+        if (Utils.hasUnresolvableType(parameterType)) {
+          throw parameterError(p, &quot;Parameter type must not include a type variable or wildcard: %s&quot;,
+              parameterType);
+        }
+
+        Annotation[] parameterAnnotations = parameterAnnotationsArray[p];
+        if (parameterAnnotations == null) {
+          throw parameterError(p, &quot;No Retrofit annotation found.&quot;);
+        }
+
+        parameterHandlers[p] = parseParameter(p, parameterType, parameterAnnotations);
+      }
+
+      return new ServiceMethod&lt;&gt;(this);
+    }
+</code></pre><p>我们看到在生成servicemethod的过程中，会初始化calladapter和responseConverter两个变量，这两个变量的初始化的实例是之前在生成retrofit实例时，提供给它的adapter工厂和converter工厂进行生产的，如果adapter工厂没有提供，那么就会采用默认的adapter工厂，如代码：<br><img src="http://ww2.sinaimg.cn/large/006tNbRwjw1f5um5yby42j30lp0gf0vd.jpg" alt="15:16:04.jpg"><br>我们看到在retrofit的build中，默认会使用defaultCallAdapterFactory，同时callfactroy也会采用默认的OkHttpClient。如果不采用默认的，我们可以传入自己的factroy进行替换。这里使用到了<strong>工厂模式</strong>。converterFactory并没有传入默认的值，所以需要自己传入。</p>
+<h4 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h4><p>回到servicemethod的build（）方法中，除了初始化calladapter和responseConverter两个变量，还会采用反射等方式得到生成request的一切信息。这时候并没有生成对应的request。<br>然后是执行<img src="http://ww1.sinaimg.cn/large/006tNbRwjw1f5umixrzcsj30en00nq2v.jpg" alt="15:28:33.jpg"><br>即生成retrofit框架中的okhttpcall。这里使用了装饰者模型，该okhttpcall继承了okhttp框架的那个call。然后重写了enqueue方法。看下该方法代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"> @Override</div><div class="line">public void enqueue(final Callback&lt;T&gt; callback)</div><div class="line">&#123;</div><div class="line">    okhttp3.Call call;</div><div class="line">    Throwable failure;</div><div class="line"></div><div class="line">    synchronized (this)</div><div class="line">    &#123;</div><div class="line">        if (executed) throw new IllegalStateException(&quot;Already executed.&quot;);</div><div class="line">        executed = true;</div><div class="line"></div><div class="line">        try</div><div class="line">        &#123;</div><div class="line">            call = rawCall = createRawCall();</div><div class="line">        &#125; catch (Throwable t)</div><div class="line">        &#123;</div><div class="line">            failure = creationFailure = t;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (failure != null)</div><div class="line">    &#123;</div><div class="line">        callback.onFailure(this, failure);</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (canceled)</div><div class="line">    &#123;</div><div class="line">        call.cancel();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    call.enqueue(new okhttp3.Callback()</div><div class="line">    &#123;</div><div class="line">        @Override</div><div class="line">        public void onResponse(okhttp3.Call call, okhttp3.Response rawResponse)</div><div class="line">                throws IOException</div><div class="line">        &#123;</div><div class="line">            Response&lt;T&gt; response;</div><div class="line">            try</div><div class="line">            &#123;</div><div class="line">                response = parseResponse(rawResponse);</div><div class="line">            &#125; catch (Throwable e)</div><div class="line">            &#123;</div><div class="line">                callFailure(e);</div><div class="line">                return;</div><div class="line">            &#125;</div><div class="line">            callSuccess(response);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onFailure(okhttp3.Call call, IOException e)</div><div class="line">        &#123;</div><div class="line">            try</div><div class="line">            &#123;</div><div class="line">                callback.onFailure(OkHttpCall.this, e);</div><div class="line">            &#125; catch (Throwable t)</div><div class="line">            &#123;</div><div class="line">                t.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        private void callFailure(Throwable e)</div><div class="line">        &#123;</div><div class="line">            try</div><div class="line">            &#123;</div><div class="line">                callback.onFailure(OkHttpCall.this, e);</div><div class="line">            &#125; catch (Throwable t)</div><div class="line">            &#123;</div><div class="line">                t.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        private void callSuccess(Response&lt;T&gt; response)</div><div class="line">        &#123;</div><div class="line">            try</div><div class="line">            &#123;</div><div class="line">                callback.onResponse(OkHttpCall.this, response);</div><div class="line">            &#125; catch (Throwable t)</div><div class="line">            &#123;</div><div class="line">                t.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>会发现在调用okhttpcall.enqueue时，会执行createRawCall()方法，即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">private okhttp3.Call createRawCall() throws IOException</div><div class="line">&#123;</div><div class="line">    Request request = serviceMethod.toRequest(args);</div><div class="line">    okhttp3.Call call = serviceMethod.callFactory.newCall(request);</div><div class="line">    if (call == null)</div><div class="line">    &#123;</div><div class="line">        throw new NullPointerException(&quot;Call.Factory returned null.&quot;);</div><div class="line">    &#125;</div><div class="line">    return call;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>即此时会将之前servicemethod的到的信息生成request，并调用callfactory生成call，这个call就是okhttp框架的那个call。所以在生成okhttpcall实例时，只是传入了servicemethod参数等，并没有生成request和okhttp框架的的那个call，在调用其enqueue时，才生成的，并调用了okhttp框架的call的enqueue方法。<strong>不过这里用了装饰者模式，外部并不会看到不同</strong>。那采用装饰者模式对原call进行的封装的目的是什么呢？我们看到okhttpcall的enqueue方法中：<br><img src="http://ww1.sinaimg.cn/large/006tNbRwjw1f5un9zpklvj30jd0fjmy3.jpg" alt="15:54:33.jpg"><br>其中parseResponse（）方法为<br><img src="http://ww3.sinaimg.cn/large/006tNbRwjw1f5unb1jga4j30md0473z5.jpg" alt="15:55:34.jpg"><br>serviceMethod.toResponse（）方法为  </p>
+<p><img src="http://ww3.sinaimg.cn/large/006tNbRwjw1f5unchhe14j30di02iglq.jpg" alt="15:56:57.jpg"></p>
+<p>所以知道了，这里使用装饰者模式对原call进行的封装，主要是使用之前传入convertfatory生成的responseConverter对异步加载的到的数据进行转型。所以我们传入的convertfatory生成的convert实例需要实现convert方法。<br>下面看下invoke中的第三句</p>
+<pre><code>serviceMethod.callAdapter.adapt(okHttpCall);
+</code></pre><p>如果在生成retrofit实例时，传入了adapterfactory，那么这里的serviceMethod.callAdapter就是自己传入的factory生成的calladapter。如果没有，那么就使用默认的calladapter。如果想传入adapterfactory时，我们需要注意fatory生成的adapter需要实现两个方法，首先因为ServiceMethod进行build（）时，执行了</p>
+<pre><code>responseType = callAdapter.responseType();
+</code></pre><p>所以需要实现responseType()方法来的到responseType，还要实现的是这里的adapt（）方法。因为框架中生成calladapter是调用的Factory.get(returntype，..)生成的，所以我们要生成的adpterfactory继承CallAdapter.Factory，实现其get方法，然后在内部生成的adapter中实现responsetype和adapter（）方法即可。<br>我们看下框架默认的ExecutorCallAdapterFactory：</p>
+<pre><code>final class ExecutorCallAdapterFactory extends CallAdapter.Factory {
+  final Executor callbackExecutor;
+
+  ExecutorCallAdapterFactory(Executor callbackExecutor) {
+    this.callbackExecutor = callbackExecutor;
+  }
+
+  @Override
+  public CallAdapter&lt;Call&lt;?&gt;&gt; get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
+    if (getRawType(returnType) != Call.class) {
+      return null;
+    }
+    final Type responseType = Utils.getCallResponseType(returnType);
+    return new CallAdapter&lt;Call&lt;?&gt;&gt;() {
+      @Override public Type responseType() {
+        return responseType;
+      }
+
+      @Override public &lt;R&gt; Call&lt;R&gt; adapt(Call&lt;R&gt; call) {
+        return new ExecutorCallbackCall&lt;&gt;(callbackExecutor, call);
+      }
+    };
+  }
+</code></pre><h4 id="二次封装"><a href="#二次封装" class="headerlink" title="二次封装"></a>二次封装</h4><p>默认的calladapter的adapter（）方法是生成了ExecutorCallbackCall。看看它的作用。和上一个装饰者模式一样，ExecutorCallbackCall对okhttpcall的封装主要也是继承那个call，并重写了enqueue方法：<br>该ExecutorCallbackCall的成员变量为：<br><img src="http://ww2.sinaimg.cn/large/006tNbRwjw1f5ti9g44bqj307t0173yg.jpg" alt="16:15:28.jpg"><br>其中变量delegate是okhttpcall。<br>我们看下重写的enqueue方法，我们发现调用了delegate中的enqueue方法，也就是说这里使用了<strong>装饰者模式</strong>，在delegate中的enqueue方法传入实现了“huandler调用post（runnable）方法返回到ui线程进行ui处理”逻辑的callback。<br><img src="http://ww3.sinaimg.cn/large/006tNbRwjw1f5tip1vfzkj30ml0gbgo3.jpg" alt="16:30:28.jpg"><br>如果是Android平台，callbackExecutor为一个Executor对象，并且利用Looper.getMainLooper()实例化一个handler对象，在Executor内部通过handler.post(runnable)来执行callbackExecutor.execute（）。这样一来，ExecutorCallbackCall的作用就很明显了：<strong>使用装饰者模式将okhttp中的那个call的异步回调转发至UI线程</strong>，因此我们调用ExecutorCallbackCall.enqueue()传入的callback，只需要写ui的逻辑即可。这样也就解决了我们开头的那个问题.</p>
+<h3 id="retrofit结合rxjava"><a href="#retrofit结合rxjava" class="headerlink" title="retrofit结合rxjava"></a>retrofit结合rxjava</h3><p>前面讲了invoke中的第三句</p>
+<pre><code>serviceMethod.callAdapter.adapt(okHttpCall);
+</code></pre><p>当传入的adapter是RxJavaCallAdapterFactory时，代理的接口service实例调用其方法时，返回的就是一个observer<t>。t是observer待发射的事件，也就是订阅者需要响应处理的事件（也就是处理对象的数据类型）。<br>RxJavaCallAdapterFactory工厂产生的adapter根据情况分为：ResultCallAdapter／ResponseCallAdapter／SimpleCallAdapter。我们以SimpleCallAdapter为例：</t></p>
+<pre><code>static final class SimpleCallAdapter implements CallAdapter&lt;Observable&lt;?&gt;&gt; {
+  private final Type responseType;
+
+  SimpleCallAdapter(Type responseType) {
+    this.responseType = responseType;
+  }
+
+  @Override public Type responseType() {
+    return responseType;
+  }
+
+  @Override public &lt;R&gt; Observable&lt;R&gt; adapt(Call&lt;R&gt; call) {
+    return Observable.create(new CallOnSubscribe&lt;&gt;(call)) //
+        .flatMap(new Func1&lt;Response&lt;R&gt;, Observable&lt;R&gt;&gt;() {
+          @Override public Observable&lt;R&gt; call(Response&lt;R&gt; response) {
+            if (response.isSuccess()) {
+              return Observable.just(response.body());
+            }
+            return Observable.error(new HttpException(response));
+          }
+        });
+  }
+}
+</code></pre><p>我们主要看其实现的adapt（）方法。我们看到生成observable时：</p>
+<pre><code>Observable.create(new CallOnSubscribe&lt;&gt;(call))
+</code></pre><p>传入了一个CallOnSubscribe。这个CallOnSubscribe是什么东西呢？</p>
+<pre><code>static final class CallOnSubscribe&lt;T&gt; implements Observable.OnSubscribe&lt;Response&lt;T&gt;&gt; {
+    private final Call&lt;T&gt; originalCall;
+
+    private CallOnSubscribe(Call&lt;T&gt; originalCall) {
+      this.originalCall = originalCall;
+    }
+
+    @Override public void call(final Subscriber&lt;? super Response&lt;T&gt;&gt; subscriber) {
+      // Since Call is a one-shot type, clone it for each new subscriber.
+      final Call&lt;T&gt; call = originalCall.clone();
+
+      // Attempt to cancel the call if it is still in-flight on unsubscription.
+      subscriber.add(Subscriptions.create(new Action0() {
+        @Override public void call() {
+          call.cancel();
+        }
+      }));
+
+      if (subscriber.isUnsubscribed()) {
+        return;
+      }
+
+      try {
+        Response&lt;T&gt; response = call.execute();
+        if (!subscriber.isUnsubscribed()) {
+          subscriber.onNext(response);
+        }
+      } catch (Throwable t) {
+        Exceptions.throwIfFatal(t);
+        if (!subscriber.isUnsubscribed()) {
+          subscriber.onError(t);
+        }
+        return;
+      }
+
+      if (!subscriber.isUnsubscribed()) {
+        subscriber.onCompleted();
+      }
+    }
+  }
+</code></pre><p>这个CallOnSubscribe是一个Observable.OnSubscribe，其事件类型为Response<t>。在<a href="http://gank.io/post/560e15be2dca930e00da1083" target="_blank" rel="external">rxjava基础知识中</a>，我们知道调用observable的subscribe（Subscriber subscriber）时，其内部调用方式大致为：</t></p>
+<pre><code>public Subscription subscribe(Subscriber subscriber) {
+    subscriber.onStart();
+    onSubscribe.call(subscriber);
+    return subscriber;
+}
+</code></pre><p>即核心是调用onSubscribe.call(subscriber);onSubscribe相当于一个预处理，其call方法的目的是把observable的事件预处理成什么类型的事件，处理好了以怎么样的安排发送处理好的事件给subscriber进行相应（这些逻辑的执行线程应可以通过Observable.subscribeOn(线程）进行安排）。这都是onSubscribe的活，<strong>并且注意这些预处理都是在调用observable.subscribe（）之后进行的，不是创建observable执行的。</strong>（不是subscriber的活，subsriber只是对的到的数据进行相应比如ui处理），所以Observable创建时，要传入一个onSubscribe。<br>那我们看下事件发射给subscriber进行相应之前都进行了哪些操作。也就是看下其call（）方法：首先是对call实例的处理，这个call就是前面讲的invoke中第二个语句生成的okhttpcall.这个call语句前面说了，封装了一下解析json为目标对象的逻辑。onSubscribe.call（）方法的核心代码为：</p>
+<pre><code>Response&lt;T&gt; response = call.execute();
+           if (!subscriber.isUnsubscribed()) {
+             subscriber.onNext(response);
+</code></pre><p>call.execute()即为网络请求。（<strong>如果网络请求出现了问题，需要在这个okhttpcall.execute()中寻找，再往里就是在封装的okhttp的那个call中找bug</strong>）其返回的结果是一个response，其范型t就是我们需要的、解析到的bean对象。比如，我们通过response.body()得到的就是t类型的bean对象。前面说了，再强调一遍，<strong>这些预处理比如网络请求都是在调用observable.subscribe（）之后进行的，在Observable.subscribeOn(线程）规定的线程中执行的。</strong><br>然后通过subscriber.onNext(response);执行订阅者subscriber的onNext（）方法进行响应。<br>这时候返回的事件是response<t>的形式，通过下面这种方式，我们就可以将分发给subscriber的事件变成response.body()，也就是前面讲的T范型。这个T也是写service接口方法返回observable的范型T。</t></p>
+<pre><code>.flatMap(new Func1&lt;Response&lt;R&gt;, Observable&lt;R&gt;&gt;() {
+           @Override public Observable&lt;R&gt; call(Response&lt;R&gt; response) {
+             if (response.isSuccess()) {
+               return Observable.just(response.body());
+             }
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/12/谷歌官方mvp/" rel="next" title="谷歌官方mvp">
+                <i class="fa fa-chevron-left"></i> 谷歌官方mvp
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="chen wenchao" />
+          <p class="site-author-name" itemprop="name">chen wenchao</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#okhttp基础知识"><span class="nav-number">1.</span> <span class="nav-text">okhttp基础知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#retrofit2对该问题的封装"><span class="nav-number">2.</span> <span class="nav-text">retrofit2对该问题的封装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#retrofit2基础知识"><span class="nav-number">2.1.</span> <span class="nav-text">retrofit2基础知识</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式"><span class="nav-number">2.2.</span> <span class="nav-text">代理模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰者模式"><span class="nav-number">2.3.</span> <span class="nav-text">装饰者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二次封装"><span class="nav-number">2.4.</span> <span class="nav-text">二次封装</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#retrofit结合rxjava"><span class="nav-number">3.</span> <span class="nav-text">retrofit结合rxjava</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chen wenchao</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

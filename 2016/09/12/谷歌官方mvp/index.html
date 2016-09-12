@@ -1,0 +1,585 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="目的：
+
+写这个wiki或者研究mvp框架的目的是因为，之前在学校中一般没怎么考虑过这些东西。都是有什么东西需要加上就加上了，什么业务逻辑或者以后怎么容易复用并没有过多思考过，代码写的不够规范。我觉得通过学习这种框架，并以demo的形式实现出来，好处很多。会思考很多东西。
+mvp本身的好处。再也不用流水帐式的写代码了，view和presenter可以不同的人去写。view通过fragment来实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谷歌官方mvp">
+<meta property="og:url" content="http://happylion.me/2016/09/12/谷歌官方mvp/index.html">
+<meta property="og:site_name" content="happylion’s blog">
+<meta property="og:description" content="目的：
+
+写这个wiki或者研究mvp框架的目的是因为，之前在学校中一般没怎么考虑过这些东西。都是有什么东西需要加上就加上了，什么业务逻辑或者以后怎么容易复用并没有过多思考过，代码写的不够规范。我觉得通过学习这种框架，并以demo的形式实现出来，好处很多。会思考很多东西。
+mvp本身的好处。再也不用流水帐式的写代码了，view和presenter可以不同的人去写。view通过fragment来实">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/72f96cbajw1f6nrw29rdij20am0g3ab7.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/72f96cbajw1f6nstqsaylj20c60jnwes.jpg">
+<meta property="og:updated_time" content="2016-09-12T11:00:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="谷歌官方mvp">
+<meta name="twitter:description" content="目的：
+
+写这个wiki或者研究mvp框架的目的是因为，之前在学校中一般没怎么考虑过这些东西。都是有什么东西需要加上就加上了，什么业务逻辑或者以后怎么容易复用并没有过多思考过，代码写的不够规范。我觉得通过学习这种框架，并以demo的形式实现出来，好处很多。会思考很多东西。
+mvp本身的好处。再也不用流水帐式的写代码了，view和presenter可以不同的人去写。view通过fragment来实">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/72f96cbajw1f6nrw29rdij20am0g3ab7.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://happylion.me/2016/09/12/谷歌官方mvp/"/>
+
+  <title> 谷歌官方mvp | happylion’s blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">happylion’s blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">爱代码，爱生活</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                谷歌官方mvp
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-12T19:00:02+08:00" content="9月 12 2016">
+              9月 12 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p> <strong>目的：</strong></p>
+<ul>
+<li>写这个wiki或者研究mvp框架的目的是因为，之前在学校中一般没怎么考虑过这些东西。都是有什么东西需要加上就加上了，什么业务逻辑或者以后怎么容易复用并没有过多思考过，代码写的不够规范。我觉得通过学习这种框架，并以demo的形式实现出来，好处很多。会思考很多东西。</li>
+<li>mvp本身的好处。再也不用流水帐式的写代码了，view和presenter可以不同的人去写。view通过fragment来实现，然后添加到activity中。 这样一个activiy可以有多个fragment模块，利于维护和复用。如果每个fragment都进行组件化处理，这样代码维护起来和写起来就容易多了。  </li>
+<li>我们关心的问题，谁可以复用？view可以替换和复用，presenter也可以替换和复用。activity中不涉及业务代码。</li>
+</ul>
+<p><strong> 感悟：</strong> 需要多练习，细节上先不要考虑太多，都可以后期补充，大框架，大的脉络，锻炼有了想法想到以后就能码，不要怕错。多练习。</p>
+<hr>
+<h3 id="官方mvp介绍"><a href="#官方mvp介绍" class="headerlink" title="官方mvp介绍"></a>官方mvp介绍</h3><h4 id="总体介绍"><a href="#总体介绍" class="headerlink" title="总体介绍"></a>总体介绍</h4><ul>
+<li>一个activty中的业务以fragment分块。activity只是一个展示的舞台。放入每块对应的fragment和其动作。  </li>
+<li>每一块写的时候，先抽出view和对应的触发动作的接口，便于替换和复用。并且可以由不同的人同时写view和触发动作接口的实现。  </li>
+<li>每一块block对应的实现类fragment和presenter不会耦合对应动作或者view的接口实现。  </li>
+</ul>
+<p>官方的mvp和之前一直讨论的mvp稍微有所不同。官网的给出了一个mvp－todo的项目。<br>我们首先来看下这个项目： </p>
+<p><strong>演示</strong>  </p>
+<h4 id="contract介绍"><a href="#contract介绍" class="headerlink" title="contract介绍"></a>contract介绍</h4><p>以taskdetail页面为例，我们来实现这个界面。mvp的含义和之前的都是一样的。但是，官方的mvp引入了一个contract。这个contract是一个标准，也就是模版。就是说我之后不管是presenter还是view都是实现contract对应的接口。<br>该界面contract形式是：<br><img src="http://ww1.sinaimg.cn/large/72f96cbajw1f6nrw29rdij20am0g3ab7.jpg" alt="20:35:11.jpg"><br>那我们实现一个界面，应该写哪些接口呢？这是一个问题，通过思考，我认为其中presenter的接口是：这个界面会触发到的一系列动作。比如一个可以下拉刷新的page型的list列表界面，我们思考下会触发到的动作会有哪些呢？首先有<strong>启动页面</strong>（这个任何页面都会有），还有各种会被出发带来的一系列动作，比如滑动触发带来的<strong>加载下一页动作</strong>，下拉触发带来的<strong>刷新动作</strong>。点击每一个item按钮触发带来的<strong>跳转下一页动作</strong>。那我会想展示这一个列表是不是这个页面的动作呢？不是，因为它并不是一个触发你可以操作的动作。而是一个view本身应该具有的功能。比如我给你一个数据，通过调用view.showlistview（D data）方法，就能展示出来这个列表。通过这样的分析，我们其实就知道view和presenter具体应该有哪些接口就很明确了。通过这个我也清楚了什么是业务逻辑，什么是view本身的逻辑。<br>现在，我们再返过来看那个页面：<br><img src="http://ww2.sinaimg.cn/large/72f96cbajw1f6nstqsaylj20c60jnwes.jpg" alt="21:07:55.jpg"><br>我们看到这个界面应该有哪些<strong>触发逻辑</strong>呢？<br>应该有点击红色的按钮触发的<strong>编辑该task动作</strong>，右上角点击后的<strong>删除该task动作</strong>，还有点击task标题前面框框的<strong>标记该task动作</strong>。其他的应该没有了，我们看下是不是这些呢？答案却是是这样的（标记该task动作分为两个，完成和激活）。<br>那这个解决了，接下来就是view这个我们都应该写哪些方法。一般的，我们都知道的是showview，hideview这些。具体我认为先不急着写，用到的时候再写就行。记着接口都是一些和view相关的就可以了。</p>
+<h4 id="接下来怎么办？实现-presenter接口"><a href="#接下来怎么办？实现-presenter接口" class="headerlink" title="接下来怎么办？实现 presenter接口"></a>接下来怎么办？实现 presenter接口</h4><p>当我们写好了contract以后，我们接下来需要实现它。怎么实现。从presenter的那些接口方法入手。首先是<strong>起动界面</strong>这个触发动作。这个触发动作就是将model的数据展示出来。model的数据从哪里来呢？从model甩出来的接口获取。假如我们使用的model是loader。那我们就在presenter的start（）接口中初始化loader。（ loader的create（）接口不应该在loader中实现，应该这是一个数据请求操作，应该甩出来交给其他来处理，之后再说。）那么我们需要在loadfinish（）接口中通过得到的数据调用showtasktitle，showtaskcontent这样的view方法展示出来，还有保存这些数据供其他方法调用（我们在每个方法中注意处理这些变量的状态，其中正是因为有一些成员变量的存在，才使得关联的方法也在一个类中，）。接下来我们可以实现<strong>编辑该task</strong>这个触发动作。这个简单，将之前加载好的数据包起来，带着跳到下一页就可以了。接下来实现<strong>删除task</strong>的触发动作。这个需要我们发送一个请求把存储区的数据清除了，销毁该界面，然后跳转到task列表界面。然后是<strong>标记该task</strong>触发动作。该方法通过发送一个请求把存储区相应的task的标志位修改了，然后通过view的方法展示或隐藏前面的框框，和界面最下面的提示框。<br>我们看下presenter是不是这样实现的。<br>presenter中会耦合model，在model甩出来的接口中处理这个block数据的逻辑。</p>
+<h4 id="使用fragment去实现view接口"><a href="#使用fragment去实现view接口" class="headerlink" title="使用fragment去实现view接口"></a>使用fragment去实现view接口</h4><p>其实这些写下来以后，该实现哪些view接口已经很明显了。然后我们使用fragment去实现这些接口。<br>在之前我们看到的都是使用一个view来实现这些接口。为什么官网会使用fragment去实现这些view接口呢？因为fragmentyou生命周期。具体来说，就是如果按之前的来进行，那么实现好了view，传入到presenter中生成实例，然后呢？我们需要在activity的某个生命周期中调用presenter实例的getview（）和start（）方法来加入这个模块和启动这个模块。那如果我们想去掉这个模块了怎么办？我们可能需要在presenter中写一个detaacheview（）方法，去掉它。操作略麻烦，这是因为view本身并没有生命周期，所以我们被迫需要在activity中调用presenter进行操作。<br>而fragment中有生命周期的。做法：<br>在fragment中实现各个showview，hideview方法外，并设置各种监听器，然后把presenter接口耦合进来，在各监听位置调用此接口的触发动作，包括初始化start（）动作。</p>
+<h4 id="在activity中的使用"><a href="#在activity中的使用" class="headerlink" title="在activity中的使用"></a>在activity中的使用</h4><p>我们在一个activty中想加入一个模块。我们将一个fragment实例添加到对应的framelayout中就可以了。在生成fragment实例时，我们不需要传入presenter。因为fragment中并不包括动作的具体实现，它只是和接口耦合，需要具体动作时再加。所以如果我们想换一个实现了相同接口的fragment，我们直接换就可以了。没有耦合。  </p>
+<p>然后我们给fragment添加那些触发逻辑动作。我们只需要new 一个 presenter（）就可以了。传入需要的loader或者是request 和刚才的那个fragment 然后就没有了，我们在activty中不需要在什么鬼地方调用presenter的某个什么方法，该是不是很神奇！这样我们不需要这个模块的这些触发动作了，我们需要换一个其他版本的触发动作，我们只需要改变这个new的presenter对象就可以了。</p>
+<p>为什么这些神奇，因为动作的执行都是在fragment中，但是你可以会问生成fragment时，没有传入presenter啊，因为presenter中生成实例时，传入了fragment，<br>而传入的fragment实例在presenter中会有一个setpresenter（this），这样就把本身传入进去了，这样就产生了关系。而在activity中我们不用管这些，替换的时候直接替换就可以了。<br>展示：</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/03/coordinator踩过的坑/" rel="next" title="coordinator踩过的坑">
+                <i class="fa fa-chevron-left"></i> coordinator踩过的坑
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/12/retrofit2封装okhttp时使用到的设计模型/" rel="prev" title="retrofit2封装okhttp时使用到的设计模型">
+                retrofit2封装okhttp时使用到的设计模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="chen wenchao" />
+          <p class="site-author-name" itemprop="name">chen wenchao</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#官方mvp介绍"><span class="nav-number">1.</span> <span class="nav-text">官方mvp介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总体介绍"><span class="nav-number">1.1.</span> <span class="nav-text">总体介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#contract介绍"><span class="nav-number">1.2.</span> <span class="nav-text">contract介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接下来怎么办？实现-presenter接口"><span class="nav-number">1.3.</span> <span class="nav-text">接下来怎么办？实现 presenter接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用fragment去实现view接口"><span class="nav-number">1.4.</span> <span class="nav-text">使用fragment去实现view接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在activity中的使用"><span class="nav-number">1.5.</span> <span class="nav-text">在activity中的使用</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chen wenchao</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
